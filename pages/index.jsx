@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div>
       This is a bunch of content hahahaha
-      <Audio />
+      <Audio audio='Ritual (dislyte)' src='/audio/ritual.mp3' />
     </div>
   )
 }
