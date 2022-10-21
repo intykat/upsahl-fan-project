@@ -7,7 +7,8 @@ export default function Home() {
   return (
     <div>
       This is a bunch of content hahahaha
-      <Audio audio='Ritual (dislyte)' src='/audio/ritual.mp3' />
+      <Audio poster='/album/ritual.jpg' name='Ritual (dislyte)' src='/audio/ritual.mp3' />
+      <Audio poster='/album/ppidl.PNG' name="People I Don't Like" src='/audio/ppidl.mp3' />
     </div>
   )
 }

@@ -3,11 +3,10 @@ import React, { useState, useEffect } from 'react'
 export default function Audio(props){
 
     function loadAudio(){
-        document.getElementById('audio').src = props.src
-        const element = document.getElementById(props.audio).parentElement;
+        const element = document.getElementById(props.name);
         const audio = document.getElementById('audio');
 
-        const audioPlayerContainer = element.getElementsByClassName('audio-player-container')[0];
+        const audioPlayerContainer = element;
         const playIconContainer = element.getElementsByClassName('play-icon')[0];
         const seekSlider = element.getElementsByClassName('seek-slider')[0];
         const durationContainer = element.getElementsByClassName('duration')[0];
@@ -15,6 +14,72 @@ export default function Audio(props){
 
         let playState = 'play';
         let raf = null;
+        document.getElementById('audio').src = props.src;
+
+        function handleAudio(){
+            document.getElementById('audio').src = props.src
+            var loadedAudios = document.getElementsByClassName("loaded");
+            for (var i = 0; i < loadedAudios.length; i++) {
+                loadedAudios[i].classList.remove('loaded')
+            }
+            element.classList.add('loaded')
+            audio.pause()
+            audio.replaceWith(audio.cloneNode(true));
+
+            
+
+            if (audio.readyState > 0) {
+                displayDuration();
+                setSliderMax();
+                displayBufferedAmount();
+                audio.play();
+                playIconContainer.classList.add('pause')
+                requestAnimationFrame(whilePlaying);
+                playState = 'pause';
+            } else {
+                audio.addEventListener('loadedmetadata', () => {
+                    displayDuration();
+                    setSliderMax();
+                    displayBufferedAmount();
+                    audio.play();
+                    playIconContainer.classList.add('pause')
+                    requestAnimationFrame(whilePlaying);
+                    playState = 'pause';
+                });
+            }
+        
+            playIconContainer.addEventListener('click', () => {
+                if(playState === 'play') {
+                    playIconContainer.classList.add('pause')
+                    audio.play();
+                    requestAnimationFrame(whilePlaying);
+                    playState = 'pause';
+                } else {
+                    audio.pause();
+                    cancelAnimationFrame(raf);
+                    playState = 'play';
+                    playIconContainer.classList.remove('pause')
+                }
+            });
+        
+            audio.addEventListener('progress', displayBufferedAmount);
+        
+            seekSlider.addEventListener('input', (e) => {
+                showRangeProgress(e.target);
+                currentTimeContainer.textContent = calculateTime(seekSlider.value);
+                if(!audio.paused) {
+                    cancelAnimationFrame(raf);
+                }
+            });
+        
+            seekSlider.addEventListener('change', () => {
+                audio.currentTime = seekSlider.value;
+                if(!audio.paused) {
+                    requestAnimationFrame(whilePlaying);
+                }
+            });
+        }
+
 
         const whilePlaying = () => {
             seekSlider.value = Math.floor(audio.currentTime);
@@ -47,68 +112,17 @@ export default function Audio(props){
             //audioPlayerContainer.style.setProperty('--buffered-width', `${(bufferedAmount / seekSlider.max) * 100}%`);
         }
     
-        if (audio.readyState > 0) {
-            displayDuration();
-            setSliderMax();
-            displayBufferedAmount();
-            audio.play();
-            playIconContainer.classList.add('pause')
-            requestAnimationFrame(whilePlaying);
-            playState = 'pause';
-        } else {
-            audio.addEventListener('loadedmetadata', () => {
-                displayDuration();
-                setSliderMax();
-                displayBufferedAmount();
-                audio.play();
-                playIconContainer.classList.add('pause')
-                requestAnimationFrame(whilePlaying);
-                playState = 'pause';
-            });
-        }
-    
-        playIconContainer.addEventListener('click', () => {
-            if(playState === 'play') {
-                playIconContainer.classList.add('pause')
-                audio.play();
-                requestAnimationFrame(whilePlaying);
-                playState = 'pause';
-            } else {
-                audio.pause();
-                cancelAnimationFrame(raf);
-                playState = 'play';
-                playIconContainer.classList.remove('pause')
-            }
-        });
-    
-        audio.addEventListener('progress', displayBufferedAmount);
-    
-        seekSlider.addEventListener('input', (e) => {
-            showRangeProgress(e.target);
-            currentTimeContainer.textContent = calculateTime(seekSlider.value);
-            if(!audio.paused) {
-                cancelAnimationFrame(raf);
-            }
-        });
-    
-        seekSlider.addEventListener('change', () => {
-            audio.currentTime = seekSlider.value;
-            if(!audio.paused) {
-                requestAnimationFrame(whilePlaying);
-            }
-        });
-    
         if('mediaSession' in navigator) {
             navigator.mediaSession.metadata = new MediaMetadata({
-                title: props.audio,
+                title: props.name,
                 artist: 'Upsahl',
                 artwork: [
-                    { src: '/upsahl.PNG', sizes: '96x96', type: 'image/png' },
-                    { src: '/upsahl.PNG', sizes: '128x128', type: 'image/png' },
-                    { src: '/upsahl.PNG', sizes: '192x192', type: 'image/png' },
-                    { src: '/upsahl.PNG', sizes: '256x256', type: 'image/png' },
-                    { src: '/upsahl.PNG', sizes: '384x384', type: 'image/png' },
-                    { src: '/upsahl.PNG', sizes: '512x512', type: 'image/png' }
+                    { src: props.poster, sizes: '96x96', type: 'image/png' },
+                    { src: props.poster, sizes: '128x128', type: 'image/png' },
+                    { src: props.poster, sizes: '192x192', type: 'image/png' },
+                    { src: props.poster, sizes: '256x256', type: 'image/png' },
+                    { src: props.poster, sizes: '384x384', type: 'image/png' },
+                    { src: props.poster, sizes: '512x512', type: 'image/png' }
                 ]
             });
             navigator.mediaSession.setActionHandler('play', () => {
@@ -162,11 +176,26 @@ export default function Audio(props){
                 }
             });
         }
+
+        if (!element.classList.contains("loaded")) handleAudio()
+        
+        var observer = new MutationObserver(function(mutations) {
+            if (!element.classList.contains('loaded')){
+                console.log('removed')
+                const newEl = element.cloneNode(true)
+                newEl.getElementsByClassName('play-icon')[0].onClick = loadAudio
+                element.replaceWith(newEl);
+                observer.disconnect();    
+            }
+        });
+        
+        observer.observe(element, { attributes : true, attributeFilter : ['style', 'class'] });
+
     }
 
     return(
-        <div id={props.audio} className="audio-player-container">
-            <p>{props.audio || '...'}</p>
+        <div id={props.name} className="audio-player-container">
+            <p>{props.name || '...'}</p>
             <button onClick={loadAudio} className="play-icon"></button>
             <input type="range" className="seek-slider" max="100" defaultValue="0" />
             <span className="current-time time">0:00</span>
