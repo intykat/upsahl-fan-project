@@ -9,7 +9,7 @@ const Header = (props) => {
     <nav>
         <h1>UPSAHL</h1>
         <ul>
-            <li><a href="">Home</a></li>
+            <li><a className="active" href="">Home</a></li>
             <li><a href="">Stream</a></li>
             <li><a href="">About</a></li>
         </ul>

@@ -16,6 +16,10 @@ body {
   color: white;
 }
 
+#__next{
+  overflow-x: hidden;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -30,6 +34,9 @@ nav{
   height: 50px;
   border-bottom: 2px solid white;
   overflow: hidden;
+  position: fixed;
+  background-color: var(--clr-bg);
+  z-index: 100000000;
 }
 
 
@@ -41,8 +48,10 @@ nav h1{
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   width: fit-content;
-  margin-top: 8px;
+  margin-top: -1px;
   display: inline-block;
+  font-size: 35px;
+  margin-left: 10px;
 }
 
 nav ul {
@@ -50,8 +59,8 @@ nav ul {
   margin: 0;
   padding: 0;
   overflow: hidden;
-  top: -62px;
-  left: 100px;
+  top: -77px;
+  left: 160px;
   position: relative;
 }
 
@@ -68,24 +77,41 @@ nav li a {
   z-index: 1;
   text-align: center;
   overflow: hidden;
+  transition: color .2s;
+}
+
+nav li a.active{
+  background: var(--gradient);
+  background-size: cover;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-weight: 600;
 }
 
 nav li a::after{
   position: absolute;
   width: 100%;
-  height: 100%;
+  height: 75%;
   margin: 0;
   display: block;
   left: 0px;
   content: '';
   background: var(--gradient);
   z-index: -1;
-  top: 51px;
-  transition: top .2s;
+  top: 50px;
+  border-radius: 10px;
+  transition: top .1s;
+}
+
+nav li a:hover{
+  color: var(--clr-bg);
+  -webkit-background-clip: none;
+  -webkit-text-fill-color: var(--clr-bg);
 }
 
 nav li a:hover::after{
-  top: 0px;
+  top: 8px;
 }
 
 #splash{
@@ -95,10 +121,9 @@ nav li a:hover::after{
 
 #splash h1{
   position: relative;
-  
+  top: 5%;
   left: 50px;
-  font-size: 80px;
-  background: rgb(255,0,0);
+  font-size: 90px;
   background: var(--gradient);
   width: fit-content;
   background-repeat: no-repeat;
@@ -108,16 +133,27 @@ nav li a:hover::after{
 
 #splash .audio-player-container{
   position: relative;
-  top: 17%;
+  top: 14%;
   left: 50px;
 }
 
 #splash .audio-player-container + p {
   font-style: italic;
   position: relative;
-  top: 15%;
+  top: 12%;
   left: 425px;
   color: grey;
+}
+
+#upsahlShot{
+  width: 600px;
+  height: 600px;
+  position: absolute;
+  right: 10%;
+  top: 100px;
+  background-color: #ffffff2a;
+  border-radius: 100px;
+  z-index: 1;
 }
 
 #driveBys{
