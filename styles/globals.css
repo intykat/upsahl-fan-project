@@ -1,5 +1,6 @@
 :root{
   --clr-bg: rgb(15, 15, 15);
+  --clr-bg-alt: rgb(20, 20, 20); 
   --clr-bg-lght: rgb(39, 39, 39);
   --gradient: linear-gradient(50deg, rgba(255,0,0,1) 0%, rgba(192,1,254,1) 100%);
 }
@@ -26,7 +27,7 @@ a {
 
 nav{
   width: 100%;
-  height: 35px;
+  height: 50px;
   border-bottom: 2px solid white;
   overflow: hidden;
 }
@@ -40,6 +41,122 @@ nav h1{
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   width: fit-content;
+  margin-top: 8px;
+  display: inline-block;
+}
+
+nav ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  top: -62px;
+  left: 100px;
+  position: relative;
+}
+
+nav li {
+  float: left;
+  margin-left: 10px;
+}
+
+nav li a {
+  display: block;
+  padding: 12px;
+  font-size: 20px;
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  overflow: hidden;
+}
+
+nav li a::after{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  display: block;
+  left: 0px;
+  content: '';
+  background: var(--gradient);
+  z-index: -1;
+  top: 51px;
+  transition: top .2s;
+}
+
+nav li a:hover::after{
+  top: 0px;
+}
+
+#splash{
+  width: 100%;
+  height: 80vh;
+}
+
+#splash h1{
+  position: relative;
+  
+  left: 50px;
+  font-size: 80px;
+  background: rgb(255,0,0);
+  background: var(--gradient);
+  width: fit-content;
+  background-repeat: no-repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#splash .audio-player-container{
+  position: relative;
+  top: 17%;
+  left: 50px;
+}
+
+#splash .audio-player-container + p {
+  font-style: italic;
+  position: relative;
+  top: 15%;
+  left: 425px;
+  color: grey;
+}
+
+#driveBys{
+  overflow: hidden;
+  height: 170px;
+  width: 100%;
+  position: relative;
+  background-color: var(--clr-bg-alt);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#driveBys::before{
+  background: linear-gradient(90deg, var(--clr-bg-alt) 0%, rgba(255,255,255,0) 100%);
+  width: 100px;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  content: '';
+  z-index: 100;
+}
+
+#driveBys::after{
+  background: linear-gradient(90deg, rgba(255,255,255,0) 0%, var(--clr-bg-alt) 100%);
+  width: 100px;
+  height: 100%;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  content: '';
+  z-index: 100;
+}
+
+#driveBys .audio-player-container{
+  margin-left: 5px;
+  margin-right: 5px;
+  display: inline-block;
+  flex-shrink: 0;
 }
 
 .audio-player-container{
@@ -198,6 +315,7 @@ input[type=range]::-webkit-slider-thumb {
   border-radius: 100%;
   -webkit-appearance: none;
   margin-top: 0;
+  transition: all .2s;
 }
 
 input[type=range]:hover::-webkit-slider-thumb {
